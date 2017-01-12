@@ -1,6 +1,6 @@
 [package]
 authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
-name = "harvest"
+name = "harvest-rs"
 version = "0.1.0"
 [dependencies]
 chrono = "*"
