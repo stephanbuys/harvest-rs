@@ -1,24 +1,21 @@
 
 #[derive(Deserialize, Debug)]
-pub struct Clients(Vec<Client>);
+pub struct Clients(pub Vec<Client>);
 
 #[derive(Deserialize, Debug)]
 pub struct Client {
-    client: ClientFields
+    pub client: ClientFields
 }
 
 #[derive(Deserialize, Debug)]
 pub struct ClientFields {
-    id: u64,
-    name: String,
-    active: bool,
-    currency: String,
-    currency_symbol: String,
-    details: String,
-//    default_invoice_timeframe: null,
-//    last_invoice_kind: null
+    pub id: u64,
+    pub name: String,
+    pub active: bool,
+    pub currency: String,
+    pub currency_symbol: String,
+    pub details: String,
 }
-
 
 impl Clients {
     pub fn base_url(domain: &str) -> String {

@@ -33,7 +33,6 @@ impl TimesheetEntries {
 
     pub fn base_url_for_day(domain: &str, uid: u64, day: &str) -> Result<String, ParseError> {
         let datetime = format!("{} 00:00:00 +02:00", day);
-        println!("{}", datetime);
         let dt = DateTime::parse_from_str(&datetime, "%Y%m%d %H:%M:%S %z")?;
         let day_of_year = dt.ordinal();
         let year = dt.year();

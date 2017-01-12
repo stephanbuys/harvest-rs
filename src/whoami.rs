@@ -1,27 +1,25 @@
 
 #[derive(Deserialize, Debug)]
 pub struct WhoAmICompany {
-    base_uri: String,
+    pub base_uri: String,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct WhoAmIUser {
-    timezone: String,
-    timezone_identifier: String,
-    id: u64,
-    email: String,
-    admin: bool,
-    first_name: String,
-    last_name: String,
-
+    pub timezone: String,
+    pub timezone_identifier: String,
+    pub id: u64,
+    pub email: String,
+    pub admin: bool,
+    pub first_name: String,
+    pub last_name: String,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct WhoAmI {
-    company: WhoAmICompany,
-    user: WhoAmIUser
+    pub company: WhoAmICompany,
+    pub user: WhoAmIUser
 }
-
 
 impl WhoAmI {
     pub fn url(domain: &str) -> String {

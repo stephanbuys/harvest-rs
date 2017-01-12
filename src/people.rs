@@ -15,9 +15,9 @@ pub struct UserFields {
     pub first_name: String,
     pub last_name: String,
     pub is_active: bool,
-    default_hourly_rate: u64,
-    department: String,
-    cost_rate: Option<u64>,
+    pub default_hourly_rate: u64,
+    pub department: String,
+    pub cost_rate: Option<u64>,
 }
 
 

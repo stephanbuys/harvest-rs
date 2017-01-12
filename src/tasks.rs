@@ -1,22 +1,22 @@
 
 #[derive(Deserialize, Debug)]
-pub struct Tasks(Vec<Task>);
+pub struct Tasks(pub Vec<Task>);
 
 #[derive(Deserialize, Debug)]
 pub struct Task {
-    task: TaskFields
+    pub task: TaskFields
 }
 
 #[derive(Deserialize, Debug)]
 pub struct TaskFields {
-    id: u64,
-    name: String,
-    billable_by_default: bool,
+    pub id: u64,
+    pub name: String,
+    pub billable_by_default: bool,
     created_at: String,
     updated_at: String,
-    is_default: bool,
-    default_hourly_rate: u64,
-    deactivated: bool
+    pub is_default: bool,
+    pub default_hourly_rate: u64,
+    pub deactivated: bool
 }
 
 

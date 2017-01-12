@@ -1,19 +1,19 @@
 [package]
+authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
 name = "harvest"
 version = "0.1.0"
-authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
-
 [dependencies]
-#base64 = "*"
+chrono = "*"
 env_logger = "*"
 reqwest = "*"
 serde = "~0.8"
 serde_derive = "~0.8"
 serde_json = "~0.8"
-chrono = "*"
-
 
 [dependencies.hyper]
-version = "*"
 default-features = false
+version = "*"
+
+[dev-dependencies]
+chrono = "^0.2"
 

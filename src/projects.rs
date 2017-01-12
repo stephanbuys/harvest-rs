@@ -1,35 +1,35 @@
 
 #[derive(Deserialize, Debug)]
-pub struct Projects(Vec<Project>);
+pub struct Projects(pub Vec<Project>);
 
 #[derive(Deserialize, Debug)]
 pub struct Project {
-    project: ProjectFields
+    pub project: ProjectFields
 }
 
 #[derive(Deserialize, Debug)]
 pub struct ProjectFields {
-    id: u64,
-    client_id: u64,
-    name: String,
-    code: String,
-    active: bool,
-    billable: bool,
-    bill_by: String,
-    hourly_rate: Option<u64>,
-    budget: Option<u64>,
-    budget_by: String,
-    notify_when_over_budget: bool,
-    over_budget_notification_percentage: u64,
-    over_budget_notified_at: Option<String>,
-    show_budget_to_all: bool,
+    pub id: u64,
+    pub client_id: u64,
+    pub name: String,
+    pub code: String,
+    pub active: bool,
+    pub billable: bool,
+    pub bill_by: String,
+    pub hourly_rate: Option<u64>,
+    pub budget: Option<u64>,
+    pub budget_by: String,
+    pub notify_when_over_budget: bool,
+    pub over_budget_notification_percentage: u64,
+    pub over_budget_notified_at: Option<String>,
+    pub show_budget_to_all: bool,
     created_at: String,
     updated_at: String,
-    starts_on: Option<String>,
-    ends_on: String,
-    estimate: Option<u64>,
-    estimate_by: String,
-    notes: String,
+    pub starts_on: Option<String>,
+    pub ends_on: String,
+    pub estimate: Option<u64>,
+    pub estimate_by: String,
+    pub notes: String,
 }
 
 

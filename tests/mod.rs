@@ -1,6 +1,8 @@
 extern crate harvest;
+extern crate chrono;
 
 use std::env::{self};
+use chrono::*;
 
 fn get_api_client() -> harvest::Client {
     let username = env::var("HARVEST_USERNAME")
@@ -30,49 +32,74 @@ fn people() {
 
 }
 
+
 #[test]
 fn user() {
     let c = get_api_client();
-    let r = c.user(649670).unwrap();
+    // Get the 1st user
+    let mut users = c.people().unwrap();
+    let u = users.0.pop().unwrap();
+    let r = c.user(u.user.id).unwrap();
     println!("{:#?}", r);
 
 }
 
-#[test]
-fn entries_2() {
-    let c = get_api_client();
-    let r = c.project_entries(1185442, "20161213", "20161213").unwrap();
-    println!("{:#?}", r);
-
-}
 #[test]
 fn entries() {
     let c = get_api_client();
-    let r = c.project_entries(649670, "20170109", "20170109").unwrap();
+    // Get the 1st user
+    let mut users = c.people().unwrap();
+    let u = users.0.pop().unwrap();
+    // Today's date string
+    let dt = Local::now();
+    let d = dt.format("%Y%m%d").to_string();
+    let r = c.project_entries(u.user.id, &d, &d).unwrap();
     println!("{:#?}", r);
-
 }
 
 #[test]
 fn entry() {
     let c = get_api_client();
-    let r = c.entry(649670, 558482078).unwrap();
-    println!("{:#?}", r);
-
+    // Get the 1st user
+    let mut users = c.people().unwrap();
+    let u = users.0.pop().unwrap();
+    // Today's date string
+    let dt = Local::now();
+    let d = dt.format("%Y%m%d").to_string();
+    let mut entries = c.project_entries(u.user.id, &d, &d).unwrap();
+    // Get the 1st entry
+    let e = entries.0.pop();
+    match e {
+        None => println!("No entries"),
+        Some(e) => {
+            let e = c.entry(u.user.id, e.day_entry.id).unwrap();
+            println!("{:#?}", e);
+        }
+    }
 }
 
 #[test]
 fn day() {
     let c = get_api_client();
-    let r = c.day(649670).unwrap();
+    // Get the 1st user
+    let mut users = c.people().unwrap();
+    let u = users.0.pop().unwrap();
+    let r = c.day(u.user.id).unwrap();
     println!("{:#?}", r);
 
 }
 
+
 #[test]
 fn day_for_date() {
     let c = get_api_client();
-    let r = c.day_for_date(649670, "20170109").unwrap();
+    // Get the 1st user
+    let mut users = c.people().unwrap();
+    let u = users.0.pop().unwrap();
+    // Today's date string
+    let dt = Local::now();
+    let d = dt.format("%Y%m%d").to_string();
+    let r = c.day_for_date(u.user.id, &d).unwrap();
     println!("{:#?}", r);
 
 }
@@ -89,7 +116,10 @@ fn clients() {
 #[test]
 fn client() {
     let c = get_api_client();
-    let r = c.client(2573214).unwrap();
+    // Get the 1st client
+    let mut clients = c.clients().unwrap();
+    let x = clients.0.pop().unwrap();
+    let r = c.client(x.client.id).unwrap();
     println!("{:#?}", r);
 
 }
@@ -105,7 +135,10 @@ fn tasks() {
 #[test]
 fn task() {
     let c = get_api_client();
-    let r = c.task(2673117).unwrap();
+    // Get the 1st client
+    let mut tasks = c.tasks().unwrap();
+    let t = tasks.0.pop().unwrap();
+    let r = c.task(t.task.id).unwrap();
     println!("{:#?}", r);
 
 }
@@ -117,10 +150,14 @@ fn projects() {
     println!("{:#?}", r);
 
 }
+
 #[test]
 fn project() {
     let c = get_api_client();
-    let r = c.project(12080300).unwrap();
+    // Get the 1st project
+    let mut projects = c.projects().unwrap();
+    let p = projects.0.pop().unwrap();
+    let r = c.project(p.project.id).unwrap();
     println!("{:#?}", r);
 
 }
@@ -128,7 +165,10 @@ fn project() {
 #[test]
 fn projects_by_client() {
     let c = get_api_client();
-    let r = c.projects_by_client(2573214).unwrap();
+    // Get the 1st client
+    let mut clients = c.clients().unwrap();
+    let x = clients.0.pop().unwrap();
+    let r = c.projects_by_client(x.client.id).unwrap();
     println!("{:#?}", r);
 
 }

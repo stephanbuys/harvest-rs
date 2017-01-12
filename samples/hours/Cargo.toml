@@ -1,0 +1,12 @@
+[package]
+authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
+name = "ontime"
+version = "0.1.0"
+
+[dependencies]
+clap = "*"
+
+[dependencies.harvest]
+path = "../../"
+version = "*"
+

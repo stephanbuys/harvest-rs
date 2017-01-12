@@ -8,12 +8,11 @@ extern crate chrono;
 extern crate hyper;
 extern crate reqwest;
 
-use reqwest::Client as reqwest_Client;
-use reqwest::header::{Headers, Accept, qitem};
+use hyper::header::{Authorization, Basic};
 use hyper::header::ContentType;
 use hyper::mime::{Mime, TopLevel, SubLevel};
-use hyper::header::{Authorization, Basic};
-use std::io::Read;
+use reqwest::Client as reqwest_Client;
+use reqwest::header::{Headers, Accept, qitem};
 
 pub mod whoami;
 pub mod people;
@@ -91,36 +90,21 @@ impl Client {
 
     pub fn day(&self, uid: u64) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_daily(&self.subdomain, uid);
-
         let mut res = self.request(&url)?;
-//                        let mut message = String::new();
-//                        res.read_to_string(&mut message).unwrap();
-//                        println!("Got response: {}", message);
-//                        Err(reqwest::Error::RedirectLoop)
         let body_as_json: timesheet::TimesheetEntries = res.json()?;
         Ok(body_as_json)
     }
 
     pub fn day_for_date(&self, uid: u64, date: &str) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_for_day(&self.subdomain, uid, date).expect("Could not parse date string");
-
         let mut res = self.request(&url)?;
-        //                        let mut message = String::new();
-        //                        res.read_to_string(&mut message).unwrap();
-        //                        println!("Got response: {}", message);
-        //                        Err(reqwest::Error::RedirectLoop)
         let body_as_json: timesheet::TimesheetEntries = res.json()?;
         Ok(body_as_json)
     }
 
     pub fn entry(&self, uid: u64, id: u64) -> Result<timesheet::TimesheetEntryFields, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_entry(&self.subdomain, uid, id);
-
         let mut res = self.request(&url)?;
-//                let mut message = String::new();
-//                res.read_to_string(&mut message).unwrap();
-//                println!("Got response: {}", message);
-//                Err(reqwest::Error::RedirectLoop)
         let body_as_json: timesheet::TimesheetEntryFields = res.json()?;
         Ok(body_as_json)
     }
