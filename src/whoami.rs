@@ -1,10 +1,10 @@
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct WhoAmICompany {
     pub base_uri: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct WhoAmIUser {
     pub timezone: String,
     pub timezone_identifier: String,
@@ -15,7 +15,7 @@ pub struct WhoAmIUser {
     pub last_name: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct WhoAmI {
     pub company: WhoAmICompany,
     pub user: WhoAmIUser

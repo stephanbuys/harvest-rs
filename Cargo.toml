@@ -1,19 +1,20 @@
 [package]
 authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
 name = "harvest"
-version = "0.1.0"
+version = "0.2.0"
 [dependencies]
 chrono = "*"
 env_logger = "*"
-reqwest = "*"
-serde = "~0.8"
-serde_derive = "~0.8"
-serde_json = "~0.8"
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
 
 [dependencies.hyper]
 default-features = false
 version = "*"
 
-[dev-dependencies]
-chrono = "^0.2"
+[dependencies.reqwest]
+version = "*"
+git = "https://github.com/seanmonstar/reqwest.git"
+
 

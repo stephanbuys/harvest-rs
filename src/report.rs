@@ -1,13 +1,13 @@
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Entries(pub Vec<DayEntry>);
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DayEntry {
     pub day_entry: DayEntryFields
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct DayEntryFields {
     pub id: u64,
     pub notes: String,

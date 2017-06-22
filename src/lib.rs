@@ -8,12 +8,6 @@ extern crate chrono;
 extern crate hyper;
 extern crate reqwest;
 
-use hyper::header::{Authorization, Basic};
-use hyper::header::ContentType;
-use hyper::mime::{Mime, TopLevel, SubLevel};
-use reqwest::Client as reqwest_Client;
-use reqwest::header::{Headers, Accept, qitem};
-
 pub mod whoami;
 pub mod people;
 pub mod report;
@@ -22,10 +16,26 @@ pub mod tasks;
 pub mod projects;
 pub mod timesheet;
 
+use std::env;
+use std::io::Read;
+
 pub struct Client {
     subdomain: String,
     username: String,
     password: String,
+}
+
+const DEBUG: bool = false;
+
+pub fn get_api_client() -> Client {
+    let username = env::var("HARVEST_USERNAME")
+        .expect("environment variable HARVEST_USERNAME not set");
+    let password = env::var("HARVEST_PASSWORD")
+        .expect("environment variable HARVEST_PASSWORD not set");
+    let harvest_domain = env::var("HARVEST_DOMAIN")
+        .expect("environment variable HARVEST_DOMAIN not set");
+
+    Client::new_with(harvest_domain, username, password)
 }
 
 impl Client {
@@ -39,32 +49,20 @@ impl Client {
     }
 
     pub fn request(&self, url: &str) -> Result<reqwest::Response, reqwest::Error> {
-        let client = reqwest_Client::new().expect("client failed to construct");
-        let mut headers = Headers::new();
 
-        headers.set(Accept(vec![
-        qitem(Mime(TopLevel::Application, SubLevel::Json, vec![]))
-        ]));
+        let res = reqwest::Client::builder()
+            .unwrap()
+            .build()
+            .unwrap()
+            .get(url)
+            .unwrap()
+            .header(reqwest::header::Accept::json())
+            .header(reqwest::header::ContentType::json())
+            .basic_auth(self.username.to_owned(),Some(self.password.to_owned()))
+            .send()
+            .unwrap();
 
-        headers.set(
-            ContentType(Mime(TopLevel::Application, SubLevel::Json,
-                             vec![]))
-        );
-
-        headers.set(
-            Authorization(
-                Basic {
-                    username: self.username.to_owned(),
-                    password: Some(self.password.to_owned())
-                }
-            )
-        );
-
-        let res = client.get(url)
-            .headers(headers.clone())
-            .send();
-
-        res
+        Ok(res)
     }
 
     pub fn who_am_i(&self) -> Result<whoami::WhoAmI, reqwest::Error> {
@@ -91,14 +89,30 @@ impl Client {
     pub fn day(&self, uid: u64) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_daily(&self.subdomain, uid);
         let mut res = self.request(&url)?;
-        let body_as_json: timesheet::TimesheetEntries = res.json()?;
+        let mut content = String::new();
+        let body_as_json : timesheet::TimesheetEntries = match DEBUG {
+            true => {
+                res.read_to_string(&mut content).unwrap();
+                println!("Got: {}", content);
+                serde_json::from_str(&content).unwrap()
+            },
+            false => res.json().unwrap()
+        };
         Ok(body_as_json)
     }
 
     pub fn day_for_date(&self, uid: u64, date: &str) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_for_day(&self.subdomain, uid, date).expect("Could not parse date string");
         let mut res = self.request(&url)?;
-        let body_as_json: timesheet::TimesheetEntries = res.json()?;
+        let mut content = String::new();
+        let body_as_json : timesheet::TimesheetEntries = match DEBUG {
+            true => {
+                res.read_to_string(&mut content).unwrap();
+                println!("Got: {}", content);
+                serde_json::from_str(&content).unwrap()
+            },
+            false => res.json().unwrap()
+        };
         Ok(body_as_json)
     }
 

@@ -1,22 +1,23 @@
 use chrono::*;
+use serde_json::Value;
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TimesheetEntries {
     pub for_day: String,
     pub day_entries: Vec<TimesheetEntryFields>
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TimesheetEntryFields {
     pub id: u64,
     user_id: u64,
-    pub notes: String,
+    pub notes: Option<String>,
     pub hours: f64,
     pub spent_at: String,
     created_at: String,
     updated_at: String,
-    pub project_id: u64,
-    pub task_id: u64,
+    pub project_id: Value,
+    pub task_id: Value,
     pub project: String,
     pub task: String,
     pub client: String,
@@ -32,6 +33,7 @@ impl TimesheetEntries {
     }
 
     pub fn base_url_for_day(domain: &str, uid: u64, day: &str) -> Result<String, ParseError> {
+
         let datetime = format!("{} 00:00:00 +02:00", day);
         let dt = DateTime::parse_from_str(&datetime, "%Y%m%d %H:%M:%S %z")?;
         let day_of_year = dt.ordinal();

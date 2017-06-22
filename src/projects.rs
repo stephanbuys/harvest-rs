@@ -1,13 +1,13 @@
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Projects(pub Vec<Project>);
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Project {
     pub project: ProjectFields
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct ProjectFields {
     pub id: u64,
     pub client_id: u64,

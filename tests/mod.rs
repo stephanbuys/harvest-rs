@@ -96,7 +96,7 @@ fn day_for_date() {
     // Get the 1st user
     let mut users = c.people().unwrap();
     let u = users.0.pop().unwrap();
-    // Today's date string
+    // Today    's date string
     let dt = Local::now();
     let d = dt.format("%Y%m%d").to_string();
     let r = c.day_for_date(u.user.id, &d).unwrap();
