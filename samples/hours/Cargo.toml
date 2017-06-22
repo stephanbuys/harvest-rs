@@ -1,7 +1,7 @@
 [package]
-authors = ["Stephan Buys <stephan.buys@panoptix.co.za>"]
+authors = ["Stephan Buys <hello@stephanbuys.com>"]
 name = "ontime"
-version = "0.1.0"
+version = "0.0.0"
 
 [dependencies]
 clap = "*"
