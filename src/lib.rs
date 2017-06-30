@@ -25,7 +25,7 @@ pub struct Client {
     password: String,
 }
 
-const DEBUG: bool = false;
+const DEBUG: bool = true;
 
 pub fn get_api_client() -> Client {
     let username = env::var("HARVEST_USERNAME")
@@ -44,7 +44,7 @@ impl Client {
         Client {
             subdomain: subdomain,
             username: username,
-            password: password
+            password: password,
         }
     }
 
@@ -58,7 +58,7 @@ impl Client {
             .unwrap()
             .header(reqwest::header::Accept::json())
             .header(reqwest::header::ContentType::json())
-            .basic_auth(self.username.to_owned(),Some(self.password.to_owned()))
+            .basic_auth(self.username.to_owned(), Some(self.password.to_owned()))
             .send()
             .unwrap();
 
@@ -75,7 +75,17 @@ impl Client {
     pub fn people(&self) -> Result<people::People, reqwest::Error> {
         let url = self::people::People::base_url(&self.subdomain);
         let mut res = self.request(&url)?;
-        let body_as_json: people::People = res.json()?;
+        let mut res = self.request(&url)?;
+        let mut content = String::new();
+        let body_as_json: people::People = match DEBUG {
+            true => {
+                res.read_to_string(&mut content).unwrap();
+                println!("Got: {}", content);
+                serde_json::from_str(&content).unwrap()
+            }
+            false => res.json().unwrap(),
+        };
+//        let body_as_json: people::People = res.json()?;
         Ok(body_as_json)
     }
 
@@ -90,40 +100,54 @@ impl Client {
         let url = self::timesheet::TimesheetEntries::base_url_daily(&self.subdomain, uid);
         let mut res = self.request(&url)?;
         let mut content = String::new();
-        let body_as_json : timesheet::TimesheetEntries = match DEBUG {
+        let body_as_json: timesheet::TimesheetEntries = match DEBUG {
             true => {
                 res.read_to_string(&mut content).unwrap();
                 println!("Got: {}", content);
                 serde_json::from_str(&content).unwrap()
-            },
-            false => res.json().unwrap()
+            }
+            false => res.json().unwrap(),
         };
         Ok(body_as_json)
     }
 
-    pub fn day_for_date(&self, uid: u64, date: &str) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
-        let url = self::timesheet::TimesheetEntries::base_url_for_day(&self.subdomain, uid, date).expect("Could not parse date string");
+    pub fn day_for_date(
+        &self,
+        uid: u64,
+        date: &str,
+    ) -> Result<timesheet::TimesheetEntries, reqwest::Error> {
+        let url = self::timesheet::TimesheetEntries::base_url_for_day(&self.subdomain, uid, date)
+            .expect("Could not parse date string");
         let mut res = self.request(&url)?;
         let mut content = String::new();
-        let body_as_json : timesheet::TimesheetEntries = match DEBUG {
+        let body_as_json: timesheet::TimesheetEntries = match DEBUG {
             true => {
                 res.read_to_string(&mut content).unwrap();
                 println!("Got: {}", content);
                 serde_json::from_str(&content).unwrap()
-            },
-            false => res.json().unwrap()
+            }
+            false => res.json().unwrap(),
         };
         Ok(body_as_json)
     }
 
-    pub fn entry(&self, uid: u64, id: u64) -> Result<timesheet::TimesheetEntryFields, reqwest::Error> {
+    pub fn entry(
+        &self,
+        uid: u64,
+        id: u64,
+    ) -> Result<timesheet::TimesheetEntryFields, reqwest::Error> {
         let url = self::timesheet::TimesheetEntries::base_url_entry(&self.subdomain, uid, id);
         let mut res = self.request(&url)?;
         let body_as_json: timesheet::TimesheetEntryFields = res.json()?;
         Ok(body_as_json)
     }
 
-    pub fn project_entries(&self, id: u64, from: &str, to: &str) -> Result<report::Entries, reqwest::Error> {
+    pub fn project_entries(
+        &self,
+        id: u64,
+        from: &str,
+        to: &str,
+    ) -> Result<report::Entries, reqwest::Error> {
         let url = self::report::Entries::base_url(&self.subdomain, id, from, to);
         let mut res = self.request(&url)?;
         let body_as_json: report::Entries = res.json()?;
@@ -131,7 +155,7 @@ impl Client {
     }
 
     pub fn client(&self, id: u64) -> Result<clients::Client, reqwest::Error> {
-        let url = self::clients::Clients::base_url_client(&self.subdomain,id);
+        let url = self::clients::Clients::base_url_client(&self.subdomain, id);
         let mut res = self.request(&url)?;
         let body_as_json: clients::Client = res.json()?;
         Ok(body_as_json)
@@ -144,7 +168,7 @@ impl Client {
     }
 
     pub fn task(&self, id: u64) -> Result<tasks::Task, reqwest::Error> {
-        let url = self::tasks::Tasks::base_url_task(&self.subdomain,id);
+        let url = self::tasks::Tasks::base_url_task(&self.subdomain, id);
         let mut res = self.request(&url)?;
         let body_as_json: tasks::Task = res.json()?;
         Ok(body_as_json)

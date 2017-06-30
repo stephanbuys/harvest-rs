@@ -1,10 +1,11 @@
 
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Tasks(pub Vec<Task>);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
-    pub task: TaskFields
+    pub task: TaskFields,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -16,7 +17,7 @@ pub struct TaskFields {
     updated_at: String,
     pub is_default: bool,
     pub default_hourly_rate: u64,
-    pub deactivated: bool
+    pub deactivated: bool,
 }
 
 

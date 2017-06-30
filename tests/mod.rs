@@ -1,7 +1,7 @@
 extern crate harvest;
 extern crate chrono;
 
-use std::env::{self};
+use std::env;
 use chrono::*;
 
 fn get_api_client() -> harvest::Client {
@@ -172,4 +172,3 @@ fn projects_by_client() {
     println!("{:#?}", r);
 
 }
-

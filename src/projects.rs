@@ -4,7 +4,7 @@ pub struct Projects(pub Vec<Project>);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Project {
-    pub project: ProjectFields
+    pub project: ProjectFields,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

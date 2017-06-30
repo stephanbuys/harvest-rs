@@ -4,7 +4,7 @@ use serde_json::Value;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TimesheetEntries {
     pub for_day: String,
-    pub day_entries: Vec<TimesheetEntryFields>
+    pub day_entries: Vec<TimesheetEntryFields>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -23,13 +23,16 @@ pub struct TimesheetEntryFields {
     pub client: String,
     pub hours_without_timer: f64,
     pub started_at: String,
-    pub ended_at: String
+    pub ended_at: String,
 }
 
 impl TimesheetEntries {
-
     pub fn base_url_daily(domain: &str, uid: u64) -> String {
-        format!("https://{}.harvestapp.com/daily?of_user={}&slim=1", domain, uid)
+        format!(
+            "https://{}.harvestapp.com/daily?of_user={}&slim=1",
+            domain,
+            uid
+        )
     }
 
     pub fn base_url_for_day(domain: &str, uid: u64, day: &str) -> Result<String, ParseError> {
@@ -39,10 +42,21 @@ impl TimesheetEntries {
         let day_of_year = dt.ordinal();
         let year = dt.year();
 
-        Ok(format!("https://{}.harvestapp.com/daily/{}/{}?of_user={}&slim=1", domain, day_of_year, year, uid))
+        Ok(format!(
+            "https://{}.harvestapp.com/daily/{}/{}?of_user={}&slim=1",
+            domain,
+            day_of_year,
+            year,
+            uid
+        ))
     }
 
     pub fn base_url_entry(domain: &str, uid: u64, id: u64) -> String {
-        format!("https://{}.harvestapp.com/daily/show/{}?of_user={}", domain, id, uid)
+        format!(
+            "https://{}.harvestapp.com/daily/show/{}?of_user={}",
+            domain,
+            id,
+            uid
+        )
     }
 }

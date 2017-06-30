@@ -4,7 +4,7 @@ pub struct Clients(pub Vec<Client>);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Client {
-    pub client: ClientFields
+    pub client: ClientFields,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

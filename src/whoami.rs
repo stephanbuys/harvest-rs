@@ -18,7 +18,7 @@ pub struct WhoAmIUser {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WhoAmI {
     pub company: WhoAmICompany,
-    pub user: WhoAmIUser
+    pub user: WhoAmIUser,
 }
 
 impl WhoAmI {

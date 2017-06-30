@@ -1,10 +1,11 @@
+use serde_json::Value;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct People(pub Vec<User>);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
-    pub user: UserFields
+    pub user: UserFields,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -15,9 +16,9 @@ pub struct UserFields {
     pub first_name: String,
     pub last_name: String,
     pub is_active: bool,
-    pub default_hourly_rate: u64,
+    pub default_hourly_rate: Value,
     pub department: Option<String>,
-    pub cost_rate: Option<u64>,
+    pub cost_rate: Option<Value>,
 }
 
 

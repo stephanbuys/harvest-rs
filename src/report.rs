@@ -4,7 +4,7 @@ pub struct Entries(pub Vec<DayEntry>);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct DayEntry {
-    pub day_entry: DayEntryFields
+    pub day_entry: DayEntryFields,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -26,6 +26,12 @@ pub struct DayEntryFields {
 
 impl Entries {
     pub fn base_url(domain: &str, id: u64, from: &str, to: &str) -> String {
-        format!("https://{}.harvestapp.com/people/{}/entries?from={}&to={}", domain, id, from, to)
+        format!(
+            "https://{}.harvestapp.com/people/{}/entries?from={}&to={}",
+            domain,
+            id,
+            from,
+            to
+        )
     }
 }
