@@ -25,7 +25,7 @@ pub struct Client {
     password: String,
 }
 
-const DEBUG: bool = true;
+const DEBUG: bool = false;
 
 pub fn get_api_client() -> Client {
     let username = env::var("HARVEST_USERNAME")
